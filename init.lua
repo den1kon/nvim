@@ -3,6 +3,11 @@ vim.g.mapleader = " "
 -- Lazy
 require("config.lazy")
 
+-- My note-taking plugin
+local notes = require('digital-notes')
+require('digital-notes.commands').setup()
+vim.keymap.set('n', '<leader>if', ':InsertFrontmatter<CR>')
+
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
