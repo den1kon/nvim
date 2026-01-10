@@ -33,3 +33,14 @@ vim.keymap.set({ 'n', 'v', 'x' }, '<leader>y', '"+y<CR>')
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>d', '"+d<CR>')
 
 vim.cmd[[colorscheme tokyonight-night]]
+
+-- QoL
+vim.keymap.set('n', '<leader>o', ':update<CR> :source<CR>')
+vim.keymap.set('n', '<leader>w', ':write<CR>')
+vim.keymap.set('n', '<leader>q', ':quit<CR>')
+
+-- Telescope
+vim.keymap.set('n', '<leader>lg', ':Telescope live_grep<CR>')
+vim.keymap.set('n', '<leader>ff', ':Telescope find_files<CR>')
+vim.keymap.set('n', '<leader>gs', ':Telescope grep_string<CR>')
+vim.keymap.set('n', '<leader>gf', ':Telescope git_files<CR>')
