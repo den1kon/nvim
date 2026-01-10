@@ -6,9 +6,6 @@ require("config.lazy")
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
--- LSP
--- vim.lsp.enable({ "lua_ls", "tinymist", "markdown_oxide", "java_language_server", "rust_analyzer" })
-
 -- Must-haves
 vim.o.relativenumber = true
 vim.o.number = true
@@ -44,3 +41,4 @@ vim.keymap.set('n', '<leader>lg', ':Telescope live_grep<CR>')
 vim.keymap.set('n', '<leader>ff', ':Telescope find_files<CR>')
 vim.keymap.set('n', '<leader>gs', ':Telescope grep_string<CR>')
 vim.keymap.set('n', '<leader>gf', ':Telescope git_files<CR>')
+
