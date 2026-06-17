@@ -5,7 +5,7 @@ function M.init()
 	require("daenikon.lsp").setup()
 	require("daenikon.treesitter").setup()
 	require("daenikon.keybinds").setup()
-	require("daenikon.markdown").setup()
+	-- require("daenikon.markdown").setup()
 	require("daenikon.spellcheck").setup()
 
 	local hipatterns = require("mini.hipatterns")

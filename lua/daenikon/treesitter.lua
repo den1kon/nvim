@@ -21,6 +21,12 @@ function M.setup()
 		"css",
 		"html",
 		"typst",
+		"cpp",
+		"bash",
+		"ini",
+		"yaml",
+		"javascript",
+		"vue",
 	}
 
 	local filetypes = {
@@ -33,6 +39,7 @@ function M.setup()
 		"nix",
 		"toml",
 		"typescript",
+		"javascript",
 		"tsx",
 		"typescriptreact",
 		"javascriptreact",
@@ -40,6 +47,12 @@ function M.setup()
 		"css",
 		"html",
 		"typst",
+		"cpp",
+		"bash",
+		"sh",
+		"ini",
+		"yaml",
+		"vue",
 	}
 
 	require("nvim-treesitter").install(languages)
@@ -47,11 +60,17 @@ function M.setup()
 	-- Disable native regex syntax highlighting
 	vim.cmd([[syntax off]])
 
+	-- Map .env files to ini filetype
+	vim.filetype.add({
+		pattern = { ["%.env.*"] = "ini" },
+	})
+
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = filetypes,
 		callback = function()
 			-- syntax highlighting, provided by Neovim
 			vim.treesitter.language.register("typescript", { "tsx", "javascript", "jsx", "typescriptreact" })
+			vim.treesitter.language.register("ini", { "env" }) -- Map env to ini parser
 			vim.treesitter.start()
 			-- folds, provided by Neovim
 			-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"

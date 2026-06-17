@@ -11,10 +11,14 @@ local function command_factory(client, bufnr, cmd)
 	}, { bufnr = bufnr })
 end
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+
 local config = {
 	root_markers = { ".git", ".obsidian", ".moxide.toml" },
 	filetypes = { "markdown" },
 	cmd = { "markdown-oxide" },
+	capabilities = capabilities,
 	on_attach = function(client, bufnr)
 		for _, cmd in ipairs({ "today", "tomorrow", "yesterday" }) do
 			vim.api.nvim_buf_create_user_command(

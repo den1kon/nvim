@@ -13,8 +13,10 @@ function M.setup()
 	require("daenikon.lsp.ts_ls").setup()
 	-- Typst (tinymist)
 	require("daenikon.lsp.tinymist").setup()
+	-- C/Cpp (clangd)
+	require("daenikon.lsp.clangd").setup()
 
-	vim.lsp.enable({ "lua_ls", "nil_ls", "markdown_oxide", "phpactor", "ts_ls", "tinymist" })
+	vim.lsp.enable({ "clangd", "lua_ls", "nil_ls", "markdown_oxide", "phpactor", "ts_ls", "tinymist" })
 end
 
 return M
