@@ -15,6 +15,9 @@ require("daenikon").init()
 -- require("digital-notes.usercommands").setup()
 -- require("digital-notes.keybinds").setup()
 
+-- Sync clipboard between the OS and Neovim.
+vim.o.clipboard = 'unnamedplus'
+
 vim.o.list = true
 vim.opt.listchars = { lead = "·", leadmultispace = "· ", tab = "» ", trail = "·", nbsp = "␣" }
 
