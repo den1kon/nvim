@@ -18,6 +18,9 @@ require("daenikon").init()
 -- Sync clipboard between the OS and Neovim.
 vim.o.clipboard = 'unnamedplus'
 
+-- Enable project-local configuration.
+vim.o.exrc = true
+
 vim.o.list = true
 vim.opt.listchars = { lead = "·", leadmultispace = "· ", tab = "» ", trail = "·", nbsp = "␣" }
 
