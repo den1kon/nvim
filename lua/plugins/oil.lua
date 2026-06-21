@@ -1,5 +1,17 @@
 local detail = false
 
+-- global function to retrieve the current directory
+function _G.get_oil_winbar()
+	local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+	local dir = require("oil").get_current_dir(bufnr)
+	if dir then
+		return vim.fn.fnamemodify(dir, ":~")
+	else
+		-- If there is no current directory (e.g. over ssh), just show the buffer name
+		return vim.api.nvim_buf_get_name(0)
+	end
+end
+
 return {
 	"stevearc/oil.nvim",
 	opts = {
@@ -21,6 +33,7 @@ return {
 		},
 		-- Window-local options to use for oil buffers
 		win_options = {
+			winbar = "%!v:lua.get_oil_winbar()", -- shows cwd in winbar
 			wrap = false,
 			signcolumn = "yes:2", -- for oil-git-status.nvim
 			cursorcolumn = false,
@@ -62,6 +75,7 @@ return {
 		-- Set to `false` to remove a keymap
 		-- See :help oil-actions for a list of all available actions
 		keymaps = {
+			["~"] = { "<cmd>edit $HOME<CR>", mode = "n", desc = "Edit $HOME directory" },
 			["g?"] = { "actions.show_help", mode = "n" },
 			["<CR>"] = "actions.select",
 			["<C-s>"] = { "actions.select", opts = { vertical = true } },
@@ -83,11 +97,35 @@ return {
 				callback = function()
 					detail = not detail
 					if detail then
-						require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
+						require("oil").set_columns({
+							"icon",
+							"permissions",
+							"size",
+							{ "mtime", highlight = "Special" },
+							-- { "birthtime", highlight = "Special" },
+						})
 					else
 						require("oil").set_columns({ "icon" })
 					end
 				end,
+			},
+			["<leader>:"] = {
+				"actions.open_cmdline",
+				opts = {
+					shorten_path = true,
+					modify = ":h",
+				},
+				desc = "Open the command line with the current directory as an argument",
+			},
+			["<leader>ff"] = {
+				function()
+					require("telescope.builtin").find_files({
+						cwd = require("oil").get_current_dir(),
+					})
+				end,
+				mode = "n",
+				nowait = true,
+				desc = "Find files in the current directory",
 			},
 		},
 		-- Set to false to disable all of the above keymaps
@@ -114,6 +152,8 @@ return {
 				-- see :help oil-columns to see which columns are sortable
 				{ "type", "asc" },
 				{ "name", "asc" },
+				-- { "type", "desc" },
+				-- { "mtime", "desc" },
 			},
 			-- Customize the highlight group for the file name
 			highlight_filename = function(entry, is_hidden, is_link_target, is_link_orphan)
@@ -146,12 +186,13 @@ return {
 			max_height = 0,
 			border = nil,
 			win_options = {
+				winbar = "", -- overwrite the global winbar
 				winblend = 0,
 			},
 			-- optionally override the oil buffers window title with custom function: fun(winid: integer): string
 			get_win_title = nil,
 			-- preview_split: Split direction: "auto", "left", "right", "above", "below".
-			preview_split = "auto",
+			preview_split = "right",
 			-- This is the config that will be passed to nvim_open_win.
 			-- Change values here to customize the layout
 			override = function(conf)
@@ -169,7 +210,9 @@ return {
 				return false
 			end,
 			-- Window-local options to use for preview window buffers
-			win_options = {},
+			win_options = {
+				winbar = "%!v:lua.get_oil_winbar()", -- shows cwd in winbar
+			},
 		},
 		-- Configuration for the floating action confirmation window
 		confirmation = {
