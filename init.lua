@@ -1,66 +1,56 @@
-vim.g.mapleader = " "
+require("settings")
 
--- Lazy
-require("config.lazy")
+vim.pack.add({
+	{
+		src = "https://github.com/nvim-treesitter/nvim-treesitter",
+		version = "4916d6592ede8c07973490d9322f187e07dfefac", -- latest commit before archive
+	},
+	{ src = "https://github.com/folke/tokyonight.nvim" },
+	{ src = "https://github.com/nvim-mini/mini.nvim", version = "main" },
+	{ src = "https://github.com/stevearc/conform.nvim", version = "master" },
+	{ src = "https://github.com/den1kon/slipnote.nvim", version = "main" },
+	{ src = "https://github.com/neovim/nvim-lspconfig", version = "master" },
+	{ src = "https://github.com/mbbill/undotree", version = "master" },
+})
+
+require("treesitter")
+require("fmt")
 
 vim.cmd([[colorscheme tokyonight-night]])
 
--- vim.treesitter.language.add('markdown', { path = "/Users/denyskondratiuk/.config/nvim/parser/markdown.so" })
--- vim.treesitter.language.add('markdown_', { path = "/Users/denyskondratiuk/.config/nvim/parser/markdown_inline.so" })
+-- MINI.NVIM ====================================================================================================
 
+-- mini.files----------------------------------------------------------------------------------------------------
+require("mini.files").setup()
 
--- me
-require("daenikon").init()
--- My note-taking plugin
--- require("digital-notes.usercommands").setup()
--- require("digital-notes.keybinds").setup()
+--------------------------------------------------
+require("mini.icons").setup()
+require("mini.pick").setup()
+require("mini.indentscope").setup()
+require("mini.trailspace").setup()
+require("mini.visits").setup()
+require("mini.git").setup()
+require("mini.diff").setup({
+	view = {
+		-- Visualization style. Possible values are 'sign' and 'number'.
+		style = "sign",
+	},
+})
+require("mini.statusline").setup()
+require("mini.extra").setup()
+require("mini.cmdline").setup()
+require("mini.completion").setup()
+require("mini.notify").setup()
+require("miniclue")
 
--- Sync clipboard between the OS and Neovim.
-vim.o.clipboard = 'unnamedplus'
+-----------------------------------------------------------------------------------------------------------------
 
--- Enable project-local configuration.
-vim.o.exrc = true
+require("slipnote").setup()
 
-vim.o.list = true
-vim.opt.listchars = { lead = "·", leadmultispace = "· ", tab = "» ", trail = "·", nbsp = "␣" }
+require("keybinds")
 
--- Must-haves
---
-vim.o.conceallevel = 2
--- Line numbers
-vim.o.relativenumber = true
-vim.o.number = true
+require("lsp").setup()
 
-vim.o.wrap = false
-vim.o.swapfile = false
-vim.o.signcolumn = "yes"
-vim.o.winborder = "rounded"
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.showtabline = 2
-vim.opt.cursorcolumn = false
-vim.opt.cursorline = true
-vim.opt.ignorecase = true
-vim.opt.smartindent = true
-vim.opt.termguicolors = true
-vim.opt.undofile = true
-vim.cmd([[set mouse=]])
-vim.cmd([[set noswapfile]])
+vim.lsp.enable({ "clangd", "lua_ls", "nil_ls", "markdown_oxide", "phpactor", "ts_ls", "tinymist" })
 
-vim.api.nvim_set_hl(0, "CustomHipatternsDefinition", { bg = "#3f62a8" })
-vim.api.nvim_set_hl(0, "CustomHipatternsYamlFrontmatter", { bg = "#2f302e" })
-vim.api.nvim_set_hl(0, "SpellBad", { italic = true, undercurl = true })
--- vim.api.nvim_set_hl(0, "SpellCad", { italic = true, fg = "#aaaa27", undercurl = true })
-
--- vim.api.nvim_create_autocmd("FileType", {
--- 	pattern = { "markdown" },
--- 	callback = function()
--- 		-- markdown_callback()
--- 		-- vim.cmd([[ToggleEnglishSpellcheck]]) -- Enables English spell checking, since it is off by default
--- 	end,
--- })
-
---- --------------------------------------------
-
--- vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format)
-vim.keymap.set("n", "<leader>od", vim.diagnostic.open_float)
+require("marks")
